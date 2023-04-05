@@ -1,7 +1,7 @@
 import {generateQueryStrFromObject, processFetchRequest} from '../utils';
 
 const QUOTABLE_BASE_URL = 'https://api.quotable.io';
-export const MINDFUL_TAGS = 'happy|happiness|mindfil|mindfulness|kind';
+export const MINDFUL_TAGS = 'happy|joy|happiness|mindful|mindfulness|kindness';
 
 /**
  * Get list of quotes

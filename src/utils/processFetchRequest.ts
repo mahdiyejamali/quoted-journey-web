@@ -5,15 +5,7 @@
  * @returns json response
  */
 const processFetchRequest = async (url: any, options?: any) => {
-    const ts = Date.now();
-    const method = options?.method || 'GET';
-    const endpoint = url.match(
-      /((?!\S+\s)?\S*[/].*?(?:\S+\s)?\S*[/])([\s\S]*)/,
-    )[2];
-  
-    const response = await fetch(url, options);
-    console.log(`${method}${response.status}: ${Date.now() - ts}ms /${endpoint}`);
-  
+    const response = await fetch(url, options);  
     if (response.ok) {
       return response.json();
     }

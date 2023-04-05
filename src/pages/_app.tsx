@@ -1,11 +1,11 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 
-import { Roboto } from 'next/font/google'
+import { Kalam } from 'next/font/google'
 
-const roboto = Roboto({
-  weight: '500',
-  style: ['normal', 'italic'],
+const roboto = Kalam({
+  weight: '700',
+  style: ['normal'],
   subsets: ['latin'],
 })
 
