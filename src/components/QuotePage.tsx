@@ -2,17 +2,20 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react';
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
-import { Drawer, Fab, Slider } from '@mui/material';
+import { Fab } from '@mui/material';
 import { Edit, Favorite } from '@mui/icons-material';
-import ColorSelect from './ColorSelect';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectColor, selectFontSize, selectText, setColor, setFontSize, setText } from '@/store/slices/quoteSlice';
+import { selectColor, selectFontClassName, selectFontSize, selectText, selectTextShadow, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
+import SideBar from './SideBar';
   
 export default function QuotePage() {
     const dispatch = useDispatch();
     const currentQuote = useSelector(selectText);
     const textColor = useSelector(selectColor);
     const fontSize = useSelector(selectFontSize);
+    const fontClassName = useSelector(selectFontClassName);
+    const textShadowStatus = useSelector(selectTextShadow);
+    const textShadow = textShadowStatus ? TEXT_SHADOW : '';
 
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -27,9 +30,6 @@ export default function QuotePage() {
         dispatch(setText(`${response.content}\n\n--${response.author}`));
         setIsMounted(true);
     }
-
-    const onFontSizeChange = (_: any, value: number | number[]) => dispatch(setFontSize(value as number))
-    const onTextColorChange = (color: string) => dispatch(setColor(color));
 
     const toggleSideBar = () => {
         setIsSideBarOpen(!isSideBarOpen)
@@ -71,37 +71,11 @@ export default function QuotePage() {
             
             
             {(hasTransitionedIn || isMounted) && <div
-                className={`quote ${hasTransitionedIn && 'in'} ${isMounted && 'visible'} quote-text`}
-                style={{fontSize: `${fontSize}px`, color: textColor}}
+                className={`${fontClassName} quote ${hasTransitionedIn && 'in'} ${isMounted && 'visible'} quote-text`}
+                style={{fontSize: `${fontSize}px`, color: textColor, textShadow}}
             >{currentQuote}</div>}
 
-            <Drawer
-                anchor='right'
-                open={isSideBarOpen}
-                onClose={(event) => {
-                    // @ts-ignore
-                    event.stopPropagation()
-                    toggleSideBar();
-                }}
-                onClick={(event) => event.stopPropagation()}
-            >
-                <div style={{width: '400px'}}>
-                    <div>
-                        <Slider
-                            min={15}
-                            max={40}
-                            defaultValue={fontSize}
-                            aria-label="font-size"
-                            valueLabelDisplay="auto"
-                            className='font-size-slider'
-                            onChange={onFontSizeChange}
-                        />
-                    </div>
-                    <div className='color-button-wrapper'>
-                        <ColorSelect onChange={onTextColorChange} />
-                    </div>
-                </div>
-            </Drawer>
+            <SideBar isOpen={isSideBarOpen} toggleSideBar={toggleSideBar} />
         </div>
   )
 }

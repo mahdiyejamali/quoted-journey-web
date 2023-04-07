@@ -2,16 +2,17 @@ import { Fab } from '@mui/material';
 import { useState } from 'react';
 import { SwatchesPicker } from 'react-color';
 import { Colorize } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { setColor } from '@/store/slices/quoteSlice';
 
 interface ColorSelectProps {
-    onChange: (color: string) => void
 }
 
 export default function ColorSelect(props: ColorSelectProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const handleChange = (color: {hex: string}) => {
-        props.onChange(color.hex);
-    }
+
+    const dispatch = useDispatch();
+    const handleChange = (color: {hex: string}) => dispatch(setColor(color.hex));
 
     return <>
         <Fab aria-label="like" onClick={() => setIsOpen(!isOpen)}>

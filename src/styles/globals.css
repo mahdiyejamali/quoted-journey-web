@@ -134,6 +134,17 @@ a {
   width: 60%;
 }
 
+.font-select-wrapper {
+  margin-top: 30px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.text-shadow-wrapper {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
 .color-button-wrapper {
   margin-top: 30px;
   margin-left: 20px;
@@ -147,5 +158,4 @@ a {
   right: 20%;
   transform: translate(0%, 50%);
   white-space: pre-wrap;
-  /* text-shadow: 1px 1px 2px black; */
 }

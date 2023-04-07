@@ -10,6 +10,8 @@ export interface QuoteState {
     text: string;
     color: string;
     fontSize: number;
+    fontClassName: string;
+    textShadow: boolean;
 }
 
 const makeStore = () =>
