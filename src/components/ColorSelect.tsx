@@ -1,23 +1,25 @@
+import { Fab } from '@mui/material';
+import { useState } from 'react';
 import { SwatchesPicker } from 'react-color';
+import { Colorize } from '@mui/icons-material';
 
-export default function ColorSelect() {
-    const handleChange = (color, event) => {
-        // color = {
-        //   hex: '#333',
-        //   rgb: {
-        //     r: 51,
-        //     g: 51,
-        //     b: 51,
-        //     a: 1,
-        //   },
-        //   hsl: {
-        //     h: 0,
-        //     s: 0,
-        //     l: .20,
-        //     a: 1,
-        //   },
-        // }
+interface ColorSelectProps {
+    onChange: (color: string) => void
+}
+
+export default function ColorSelect(props: ColorSelectProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const handleChange = (color: {hex: string}) => {
+        props.onChange(color.hex);
     }
 
-    return <SwatchesPicker onChange={ handleChange } />
+    return <>
+        <Fab aria-label="like" onClick={() => setIsOpen(!isOpen)}>
+            <Colorize />
+        </Fab>
+
+        {isOpen && <div style={{marginTop: 10, zIndex: 1}}>
+                <SwatchesPicker height={150} onChange={ handleChange } />
+            </div>}
+    </>
 }
