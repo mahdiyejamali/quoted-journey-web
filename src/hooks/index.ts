@@ -1,3 +1,5 @@
 import useMountTransition from "./useMountTransition";
+import useLocalStorage from "./useLocalStorage";
 
-export default {useMountTransition};
+
+export default { useMountTransition, useLocalStorage };

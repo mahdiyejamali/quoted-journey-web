@@ -6,7 +6,7 @@ import { Fab } from '@mui/material';
 import { Edit, Favorite } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectColor, selectFontClassName, selectFontSize, selectText, selectTextShadow, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
-import SideBar from './SideBar';
+import SideBar from '@/components/SideBar';
   
 export default function QuotePage() {
     const dispatch = useDispatch();
