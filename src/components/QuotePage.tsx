@@ -1,33 +1,35 @@
 import Image from 'next/image'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
 import { Drawer, Fab, Slider } from '@mui/material';
 import { Edit, Favorite } from '@mui/icons-material';
 import ColorSelect from './ColorSelect';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectColor, selectFontSize, selectText, setColor, setFontSize, setText } from '@/store/slices/quoteSlice';
   
-const DEFAULT_FONT_SIZE = 21;
-const DEFAULT_TEXT_COLOR = 'black';
 export default function QuotePage() {
-    const [currentQuote, setCurrentQuote] = useState('');
-    const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
-    const [textColor, setTextColor] = useState(DEFAULT_TEXT_COLOR);
+    const dispatch = useDispatch();
+    const currentQuote = useSelector(selectText);
+    const textColor = useSelector(selectColor);
+    const fontSize = useSelector(selectFontSize);
 
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
 
+    useEffect(() => {
+        fetchData();
+    }, [])
+
     async function fetchData() {
         const response = await quotable.getRandomMindfulQuote();
-        setCurrentQuote(`${response.content}\n\n--${response.author}`);
+        dispatch(setText(`${response.content}\n\n--${response.author}`));
         setIsMounted(true);
     }
 
-    const onFontSizeChange = (_: any, value: number | number[]) => {
-        setFontSize(value as number);
-    }
-
-    const onColorChange = (color: string) => setTextColor(color);
+    const onFontSizeChange = (_: any, value: number | number[]) => dispatch(setFontSize(value as number))
+    const onTextColorChange = (color: string) => dispatch(setColor(color));
 
     const toggleSideBar = () => {
         setIsSideBarOpen(!isSideBarOpen)
@@ -39,7 +41,7 @@ export default function QuotePage() {
                 setIsMounted(false);
                 setTimeout(() => {
                     fetchData();
-                }, 800);
+                }, 850);
             }}
         >
             <div 
@@ -88,7 +90,7 @@ export default function QuotePage() {
                         <Slider
                             min={15}
                             max={40}
-                            defaultValue={DEFAULT_FONT_SIZE}
+                            defaultValue={fontSize}
                             aria-label="font-size"
                             valueLabelDisplay="auto"
                             className='font-size-slider'
@@ -96,7 +98,7 @@ export default function QuotePage() {
                         />
                     </div>
                     <div className='color-button-wrapper'>
-                        <ColorSelect onChange={onColorChange} />
+                        <ColorSelect onChange={onTextColorChange} />
                     </div>
                 </div>
             </Drawer>

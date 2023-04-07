@@ -1,5 +1,7 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
+import { Provider } from 'react-redux';
+import { wrapper } from '../store/store';
 
 import { Kalam } from 'next/font/google'
 
@@ -9,10 +11,14 @@ const roboto = Kalam({
   subsets: ['latin'],
 })
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, ...rest }: AppProps) {
+  const { store, props } = wrapper.useWrappedStore(rest);
+  const { pageProps } = props;
   return (
-    <main className={roboto.className}>
-      <Component {...pageProps} />
-    </main>
+    <Provider store={store}>
+      <main className={roboto.className}>
+        <Component {...pageProps} />
+      </main>
+    </Provider>
   );
 }
