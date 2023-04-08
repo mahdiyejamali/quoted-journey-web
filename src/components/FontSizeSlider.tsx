@@ -17,7 +17,7 @@ export default function FontSizeSlider(props: FontSizeProps) {
         <Slider
             min={15}
             max={40}
-            defaultValue={fontSize}
+            value={fontSize}
             aria-label="font-size"
             valueLabelDisplay="auto"
             className='font-size-slider'
