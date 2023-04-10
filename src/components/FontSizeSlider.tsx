@@ -12,10 +12,7 @@ const SliderWrapper = styled.div`
     }
 `;
 
-interface FontSizeProps {
-}
-
-export default function FontSizeSlider(props: FontSizeProps) {
+export default function FontSizeSlider() {
     const fontSize = useSelector(selectFontSize);
 
     const dispatch = useDispatch();

@@ -11,25 +11,32 @@ function loadImage(url: string): Promise<HTMLImageElement> {
 }
 
 function wrapText(context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number): void {
-    const words = text.split(' ');
-    let line = '';
+    const lines = text.split('\n');
+    let offsetY = 0;
 
-    for (let i = 0; i < words.length; i++) {
-        const word = words[i];
-        const testLine = `${line}${word} `;
-        const testWidth = context.measureText(testLine).width;
+    for (let l = 0; l < lines.length; l++) {
+        const words = lines[l].split(' ');
+        let line = '';
 
-        if (testWidth > maxWidth && i > 0) {
-            context.fillText(line, x, y);
-            line = `${word} `;
-            y += lineHeight;
-        } else {
-            line = testLine;
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const testLine = `${line}${word} `;
+            const testWidth = context.measureText(testLine).width;
+
+            if (testWidth > maxWidth && i > 0) {
+                context.fillText(line, x, y + offsetY);
+                line = `${word} `;
+                offsetY += lineHeight;
+            } else {
+                line = testLine;
+            }
         }
-    }
 
-    context.fillText(line, x, y);
+        context.fillText(line, x, y + offsetY);
+        offsetY += lineHeight;
+    }
 }
+
 
 interface UseHtml2CanvasProps {
     backgroundSrcImage: string,

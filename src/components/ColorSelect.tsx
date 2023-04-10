@@ -13,10 +13,7 @@ const ColorSwatchWrapper = styled.div`
     position: absolute;
 `;
 
-interface ColorSelectProps {
-}
-
-export default function ColorSelect(props: ColorSelectProps) {
+export default function ColorSelect() {
     const [isOpen, setIsOpen] = useState(false);
     
     const ref = useRef<HTMLDivElement>(null);
