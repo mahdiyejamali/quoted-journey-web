@@ -3,7 +3,7 @@ import FontSelect from './FontSelect';
 import FontSizeSlider from './FontSizeSlider';
 import QuotePage from './QuotePage';
 import ShadowSwitch from './ShadowSwitch';
-import SideBar from './SideBar';
+import SideBar from './QuoteSideBar';
 
 export default {
     ColorSelect,

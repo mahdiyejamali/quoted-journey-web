@@ -60,4 +60,3 @@ export const selectColor = (state: State) => state.quote?.color;
 export const selectFontSize = (state: State) => state.quote?.fontSize;
 export const selectFontClassName = (state: State) => state.quote?.fontClassName;
 export const selectTextShadow = (state: State) => state.quote?.textShadow;
-export default quoteSlice.reducer;

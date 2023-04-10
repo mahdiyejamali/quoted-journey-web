@@ -4,6 +4,12 @@ import { SwatchesPicker } from 'react-color';
 import { Colorize } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { setColor } from '@/store/slices/quoteSlice';
+import styled from '@emotion/styled';
+
+const ColorSwatchWrapper = styled.div`
+    margin-top: 10px;
+    z-index: 1;
+`;
 
 interface ColorSelectProps {
 }
@@ -19,8 +25,8 @@ export default function ColorSelect(props: ColorSelectProps) {
             <Colorize />
         </Fab>
 
-        {isOpen && <div style={{marginTop: 10, zIndex: 1}}>
+        {isOpen && <ColorSwatchWrapper>
                 <SwatchesPicker height={150} onChange={ handleChange } />
-            </div>}
+            </ColorSwatchWrapper>}
     </>
 }
