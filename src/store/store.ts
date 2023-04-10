@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
-import { quoteSlice } from './slices/quoteSlice';
-import { themeSlice } from './slices/themeSlice';
+import { quoteSlice, quoteInitialState } from './slices/quoteSlice';
+import { themeSlice, themeInitialState } from './slices/themeSlice';
 
 export const APPLICATION_STATE_KEY = 'applicationState';
 
@@ -10,11 +10,18 @@ export interface State {
     'theme': ThemeState,
 }
 
+export interface FontStyles {
+    fontFamily: string;
+    fontWeight?: number | undefined;
+    fontStyle?: string | undefined;
+}
+
 export interface QuoteState {
     text: string;
     color: string;
     fontSize: number;
     fontClassName: string;
+    fontStyles: FontStyles;
     textShadow: boolean;
 }
 
@@ -23,15 +30,21 @@ export interface ThemeState {
 }
 
 const localStorageMiddleware = ({ getState }: {getState: () => State}) => {
+    console.log('Saving state to local storage:', getState());
     // @ts-ignore
     return next => action => {
-    localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(getState()));
-      return next(action);
+        console.log('Saving state to local storage:', getState());
+        localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(getState()));
+        return next(action);
     };
 };
 
 const reHydrateStore = () => {
-    return (typeof window !== 'undefined') ? JSON.parse(localStorage?.getItem(APPLICATION_STATE_KEY) || '{}') : {};
+    const savedState = (typeof window !== 'undefined') ? JSON.parse(localStorage?.getItem(APPLICATION_STATE_KEY) || '{}') : {};
+    return {
+        quote: {...quoteInitialState, ...savedState.quote}, 
+        theme: {...themeInitialState, ...savedState.theme},
+    };
 };
 
 const makeStore = () =>

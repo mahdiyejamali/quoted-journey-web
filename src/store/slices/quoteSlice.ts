@@ -12,17 +12,18 @@ const roboto = Kalam({
 export const DEFAULT_FONT = roboto;
 export const TEXT_SHADOW = '1px 1px 2px #4C4E52';
 
-const initialState = {
+export const quoteInitialState = {
     text: '',
     color: 'white',
     fontSize: 23,
     fontClassName: roboto.className,
+    fontStyles: roboto.style,
     textShadow: true,
 };
 
 export const quoteSlice = createSlice({
   name: 'quote',
-  initialState,
+  initialState: quoteInitialState,
   reducers: {
     setText: (state, action) => {
         state.text = action.payload;
@@ -32,6 +33,9 @@ export const quoteSlice = createSlice({
     },
     setFontSize: (state, action) => {
         state.fontSize = action.payload;
+    },
+    setFontStyles: (state, action) => {
+        state.fontStyles = action.payload;
     },
     setFontClassName: (state, action) => {
         state.fontClassName = action.payload;
@@ -54,9 +58,17 @@ export const quoteSlice = createSlice({
   },
 });
 
-export const { setText, setColor, setFontSize, setFontClassName, setTextShadow } = quoteSlice.actions;
+export const { 
+    setText, 
+    setColor, 
+    setFontSize, 
+    setFontClassName, 
+    setFontStyles, 
+    setTextShadow 
+} = quoteSlice.actions;
 export const selectText = (state: State) => state.quote?.text;
 export const selectColor = (state: State) => state.quote?.color;
 export const selectFontSize = (state: State) => state.quote?.fontSize;
 export const selectFontClassName = (state: State) => state.quote?.fontClassName;
+export const selectFontStyles = (state: State) => state.quote?.fontStyles;
 export const selectTextShadow = (state: State) => state.quote?.textShadow;

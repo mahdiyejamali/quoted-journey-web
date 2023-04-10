@@ -3,18 +3,17 @@ import { HYDRATE } from 'next-redux-wrapper';
 
 import { State } from '../store';
 
-const initialState = {
+export const themeInitialState = {
     srcImage: '/bg-1.jpg',
 };
 
 export const themeSlice = createSlice({
   name: 'theme',
-  initialState,
+  initialState: themeInitialState,
   reducers: {
     setSrcImage: (state, action) => {
         state.srcImage = action.payload;
     },
-
 
     // ensure that the state on the server side matches the client side
     extraReducers: {

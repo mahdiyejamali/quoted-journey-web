@@ -1,14 +1,17 @@
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from '@emotion/styled';
+import shortid from 'shortid';
+
+import { Fab } from '@mui/material';
+import { Download, Edit, Favorite } from '@mui/icons-material';
+
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
-import { Fab } from '@mui/material';
-import { Edit, Favorite } from '@mui/icons-material';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectColor, selectFontClassName, selectFontSize, selectText, selectTextShadow, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
-import QuoteSideBar from '@/components/QuoteSideBar';
-import styled from '@emotion/styled';
+import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectText, selectTextShadow, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
 import { selectSrcImage } from '@/store/slices/themeSlice';
+import QuoteSideBar from '@/components/QuoteSideBar';
 
 const BackgroundImageWrapper = styled.div`
     z-index: -100;
@@ -47,7 +50,7 @@ const QuoteWrapper = styled.div`
         white-space: pre-wrap;
     }
 `;
-  
+
 export default function QuotePage() {
     const dispatch = useDispatch();
     const backgroundSrcImage = useSelector(selectSrcImage);
@@ -55,12 +58,22 @@ export default function QuotePage() {
     const textColor = useSelector(selectColor);
     const fontSize = useSelector(selectFontSize);
     const fontClassName = useSelector(selectFontClassName);
+    const fontStyles = useSelector(selectFontStyles);
     const textShadowStatus = useSelector(selectTextShadow);
     const textShadow = textShadowStatus ? TEXT_SHADOW : '';
 
     const [isQuoteSideBarOpen, setIsQuoteSideBarOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
+
+    const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas({
+        backgroundSrcImage,
+        fontStyles,
+        fontSize,
+        textColor,
+        textShadowStatus,
+        currentQuote,
+    });
 
     useEffect(() => {
         fetchData();
@@ -85,9 +98,20 @@ export default function QuotePage() {
                 }, 850);
             }}
         >
-            <BackgroundImageWrapper className="w-64 h-32 relative">
-                <Image style={{objectFit: 'cover'}} src={backgroundSrcImage} alt="background image" fill />
-            </BackgroundImageWrapper>
+            <div ref={downloadElementRef}>
+                <BackgroundImageWrapper className="w-64 h-32 relative">
+                    <NextImage key={shortid.generate()} style={{objectFit: 'cover'}} src={backgroundSrcImage} alt="background image" fill />
+                </BackgroundImageWrapper>
+
+                {(hasTransitionedIn || isMounted) && <QuoteWrapper>
+                    <div
+                        className={`${fontClassName} quote ${hasTransitionedIn && 'in'} ${isMounted && 'visible'} quote-text`}
+                        style={{fontSize: `${fontSize}px`, color: textColor, textShadow}}
+                    >
+                        {currentQuote}
+                    </div>
+                </QuoteWrapper>}
+            </div>
 
             <MainButtonsWrapper>
                 <Fab aria-label="edit" onClick={(event) => {
@@ -97,20 +121,17 @@ export default function QuotePage() {
                     <Edit />
                 </Fab>
 
+                <Fab disabled={!hasTransitionedIn || !isMounted} style={{marginLeft: 20}} aria-label="download" onClick={(event) => {
+                    event.stopPropagation();
+                    downloadElement();
+                }}>
+                    <Download />
+                </Fab>
+
                 <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => event.stopPropagation()}>
                     <Favorite />
                 </Fab>
             </MainButtonsWrapper>
-            
-            
-            {(hasTransitionedIn || isMounted) && <QuoteWrapper>
-                <div
-                    className={`${fontClassName} quote ${hasTransitionedIn && 'in'} ${isMounted && 'visible'} quote-text`}
-                    style={{fontSize: `${fontSize}px`, color: textColor, textShadow}}
-                >
-                    {currentQuote}
-                </div>
-            </QuoteWrapper>}
 
             <QuoteSideBar isOpen={isQuoteSideBarOpen} toggleSideBar={toggleQuoteSideBar} />
         </div>
