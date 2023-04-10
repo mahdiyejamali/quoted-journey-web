@@ -17,7 +17,7 @@ export default function ThemeSelect() {
     return (
         <Grid container rowSpacing={4} columnSpacing={{ xs: 2, sm: 2, md: 3 }}>
             {THEMES.map(src => (
-                <Grid item xs={6}>
+                <Grid key={src} item xs={6}>
                     <ThemeCard src={src} onClick={handleSelect} />
                 </Grid>
             ))}

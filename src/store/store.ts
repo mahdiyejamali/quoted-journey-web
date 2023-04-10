@@ -30,11 +30,12 @@ export interface ThemeState {
 }
 
 const localStorageMiddleware = ({ getState }: {getState: () => State}) => {
-    console.log('Saving state to local storage:', getState());
     // @ts-ignore
     return next => action => {
-        console.log('Saving state to local storage:', getState());
-        localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(getState()));
+        // Use setTimeout so this code is executed after the Redux store is updated
+        setTimeout(() => {
+            localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(getState()));
+        }, 0);
         return next(action);
     };
 };
