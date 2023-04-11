@@ -22,11 +22,12 @@ export interface QuoteState {
     fontSize: number;
     fontClassName: string;
     fontStyles: FontStyles;
-    textShadow: boolean;
+    textShadowState: boolean;
 }
 
 export interface ThemeState {
     srcImage: string;
+    musicState: boolean;
 }
 
 const localStorageMiddleware = ({ getState }: {getState: () => State}) => {

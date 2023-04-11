@@ -5,13 +5,14 @@ import styled from '@emotion/styled';
 import shortid from 'shortid';
 
 import { Fab } from '@mui/material';
-import { Download, Edit, Favorite } from '@mui/icons-material';
+import { Download, Edit, Favorite, MusicNote, MusicOff } from '@mui/icons-material';
 
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
-import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectText, selectTextShadow, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
-import { selectSrcImage } from '@/store/slices/themeSlice';
+import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
+import { selectMusicState, selectSrcImage, setMusicState } from '@/store/slices/themeSlice';
 import QuoteSideBar from '@/components/QuoteSideBar';
+import AudioPlayer from './AudioPlayer';
 
 const BackgroundImageWrapper = styled.div`
     z-index: -100;
@@ -59,8 +60,8 @@ export default function QuotePage() {
     const fontSize = useSelector(selectFontSize);
     const fontClassName = useSelector(selectFontClassName);
     const fontStyles = useSelector(selectFontStyles);
-    const textShadowStatus = useSelector(selectTextShadow);
-    const textShadow = textShadowStatus ? TEXT_SHADOW : '';
+    const textShadowState = useSelector(selectTextShadowState);
+    const textShadow = textShadowState ? TEXT_SHADOW : '';
 
     const [isQuoteSideBarOpen, setIsQuoteSideBarOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -71,7 +72,7 @@ export default function QuotePage() {
         fontStyles,
         fontSize,
         textColor,
-        textShadowStatus,
+        textShadowState,
         currentQuote,
     });
 
@@ -121,16 +122,27 @@ export default function QuotePage() {
                     <Edit />
                 </Fab>
 
-                <Fab disabled={!hasTransitionedIn || !isMounted} style={{marginLeft: 20}} aria-label="download" onClick={(event) => {
+                <Fab style={{marginLeft: 20}} aria-label="download" onClick={(event) => {
                     event.stopPropagation();
                     downloadElement();
                 }}>
                     <Download />
                 </Fab>
 
-                <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => event.stopPropagation()}>
+                <AudioPlayer renderButton={(musicState, toggleMusic) => {
+                    return (
+                        <Fab style={{marginLeft: 20}} aria-label="sound" onClick={(event) => {
+                            event.stopPropagation();
+                            toggleMusic();
+                        }}>
+                            {musicState ? <MusicOff /> : <MusicNote />}
+                        </Fab>
+                    )
+                }} />
+
+                {/* <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => event.stopPropagation()}>
                     <Favorite />
-                </Fab>
+                </Fab> */}
             </MainButtonsWrapper>
 
             <QuoteSideBar isOpen={isQuoteSideBarOpen} toggleSideBar={toggleQuoteSideBar} />

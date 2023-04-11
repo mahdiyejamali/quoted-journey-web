@@ -1,10 +1,11 @@
-import { Drawer } from "@mui/material";
+import { Drawer, IconButton } from "@mui/material";
 import ColorSelect from "./ColorSelect";
 import FontSelect from "./FontSelect";
 import FontSizeSlider from "./FontSizeSlider";
 import ShadowSwitch from "./ShadowSwitch";
 import styled from '@emotion/styled';
 import ThemeSelect from "./ThemeSelect";
+import { ChevronLeft } from "@mui/icons-material";
 
 const SideBarWrapper = styled.div`
     width: 400px;
@@ -36,6 +37,11 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
             }}
             onClick={(event) => event.stopPropagation()}
         >
+            <div>
+                <IconButton onClick={toggleSideBar}>
+                    <ChevronLeft />
+                </IconButton>
+            </div>
             <SideBarWrapper>
                 <SideBarItem>
                     <FontSizeSlider />
@@ -56,6 +62,8 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
                 <SideBarItem>
                     <ThemeSelect />
                 </SideBarItem>
+
+                <SideBarItem></SideBarItem>
             </SideBarWrapper>
         </Drawer>
     )

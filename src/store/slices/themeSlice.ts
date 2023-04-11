@@ -5,6 +5,7 @@ import { State } from '../store';
 
 export const themeInitialState = {
     srcImage: '/bg-1.jpg',
+    musicState: false,
 };
 
 export const themeSlice = createSlice({
@@ -13,6 +14,9 @@ export const themeSlice = createSlice({
   reducers: {
     setSrcImage: (state, action) => {
         state.srcImage = action.payload;
+    },
+    setMusicState: (state, action) => {
+        state.musicState = action.payload;
     },
 
     // ensure that the state on the server side matches the client side
@@ -28,5 +32,6 @@ export const themeSlice = createSlice({
   },
 });
 
-export const { setSrcImage } = themeSlice.actions;
+export const { setSrcImage, setMusicState } = themeSlice.actions;
 export const selectSrcImage = (state: State) => state.theme?.srcImage;
+export const selectMusicState = (state: State) => state.theme?.musicState;

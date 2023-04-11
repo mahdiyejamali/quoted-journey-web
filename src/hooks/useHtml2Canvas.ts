@@ -43,7 +43,7 @@ interface UseHtml2CanvasProps {
     fontStyles: FontStyles,
     fontSize: number,
     textColor: string,
-    textShadowStatus: boolean,
+    textShadowState: boolean,
     currentQuote: string,
 }
 export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
@@ -52,7 +52,7 @@ export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
         fontStyles,
         fontSize,
         textColor,
-        textShadowStatus,
+        textShadowState,
         currentQuote,
     } = props
 
@@ -75,7 +75,7 @@ export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
             // Draw text
             ctx.font = `${fontStyles.fontStyle} ${fontStyles.fontWeight} ${fontSize}px ${fontStyles.fontFamily}`;
             ctx.fillStyle = textColor;
-            ctx.shadowColor = textShadowStatus ? "#000000" : "transparent";
+            ctx.shadowColor = textShadowState ? "#000000" : "transparent";
             ctx.shadowOffsetX = 1;
             ctx.shadowOffsetY = 1;
             ctx.shadowBlur = 2;
