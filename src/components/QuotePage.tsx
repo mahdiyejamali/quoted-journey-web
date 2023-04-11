@@ -5,12 +5,12 @@ import styled from '@emotion/styled';
 import shortid from 'shortid';
 
 import { Fab } from '@mui/material';
-import { Download, Edit, Favorite, MusicNote, MusicOff } from '@mui/icons-material';
+import { Download, MusicNote, MusicOff, Settings } from '@mui/icons-material';
 
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
-import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
-import { selectMusicState, selectSrcImage, setMusicState } from '@/store/slices/themeSlice';
+import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectQuoteGenre, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
+import { selectSrcImage } from '@/store/slices/themeSlice';
 import QuoteSideBar from '@/components/QuoteSideBar';
 import AudioPlayer from './AudioPlayer';
 
@@ -55,6 +55,7 @@ const QuoteWrapper = styled.div`
 export default function QuotePage() {
     const dispatch = useDispatch();
     const backgroundSrcImage = useSelector(selectSrcImage);
+    const quoteGenre = useSelector(selectQuoteGenre);
     const currentQuote = useSelector(selectText);
     const textColor = useSelector(selectColor);
     const fontSize = useSelector(selectFontSize);
@@ -81,8 +82,9 @@ export default function QuotePage() {
     }, [])
 
     async function fetchData() {
-        const response = await quotable.getRandomMindfulQuote();
-        dispatch(setText(`${response.content}\n\n--${response.author}`));
+        const response = await quotable.getRandomQuote(quoteGenre);
+        const author = response?.author ? `\n\n--${response?.author}` : ''
+        dispatch(setText(`${response.content}${author}`));
         setIsMounted(true);
     }
 
@@ -115,11 +117,11 @@ export default function QuotePage() {
             </div>
 
             <MainButtonsWrapper>
-                <Fab aria-label="edit" onClick={(event) => {
+                <Fab aria-label="settings" onClick={(event) => {
                     event.stopPropagation()
                     toggleQuoteSideBar();
                 }}>
-                    <Edit />
+                    <Settings />
                 </Fab>
 
                 <Fab style={{marginLeft: 20}} aria-label="download" onClick={(event) => {

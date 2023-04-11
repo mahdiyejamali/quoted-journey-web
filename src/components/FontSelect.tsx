@@ -33,10 +33,7 @@ const FONTS_LIST = [
     {title: 'Pacifico', value: pacifico.className, style: pacifico.style}
 ]
 
-interface FontSelectProps {
-}
-
-export default function FontSelect(props: FontSelectProps) {
+export default function FontSelect() {
     const dispatch = useDispatch();
     const font = useSelector(selectFontClassName);
     const handleChange = (font: string) => dispatch(setFontClassName(font));

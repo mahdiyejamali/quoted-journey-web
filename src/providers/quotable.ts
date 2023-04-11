@@ -1,37 +1,60 @@
-import {generateQueryStrFromObject, processFetchRequest} from '../utils';
+import { processFetchRequest } from '../utils';
 
-const QUOTABLE_BASE_URL = 'https://api.quotable.io';
-export const MINDFUL_TAGS = 'happy|joy|happiness|mindful|mindfulness|kindness';
+export interface QuoteResponse {
+  content: string;
+  author?: string;
+}
 
-/**
- * Get list of quotes
- * @param {object=} params query params as object
- * @returns json response
- */
-const getQuotes = async function (params: any) {
-  let url = `${QUOTABLE_BASE_URL}/quotes`;
-  if (params) {
-    url += generateQueryStrFromObject(params);
-  }
+export const QUOTE_GARDEN_GENRES = [
+  "art",
+  "attitude",
+  "beauty",
+  "change", 
+  "courage",
+  "dreams",
+  "experience",
+  "failure",
+  "faith",
+  "fear",
+  "forgiveness",
+  "freedom",
+  "friendship",
+  "happiness",
+  "hope",
+  "imagination",
+  "inspirational",
+  "life",
+  "motivational",
+  "nature",
+  "peace",
+  "positive",
+  "smile",
+  "travel"
+] as const;
 
-  return processFetchRequest(url);
-};
+export type QuoteGardenGenre = typeof QUOTE_GARDEN_GENRES[number];
 
-const getRandomQuote = async function (params: any) {
-  let url = `${QUOTABLE_BASE_URL}/random`;
-  if (params) {
-    url += generateQueryStrFromObject(params);
-  }
+interface QuoteGardenParams {
+  author?: string;
+  genre?: string;
+  query?: string;
+  page?: number;
+  limit?: number;
+}
+interface QuoteGardenResponse {
+  data: {
+    quoteText: string;
+    quoteAuthor?: string;
+    quoteGenre?: string,
+  }[]
+}
 
-  return processFetchRequest(url);
-};
-
-const getRandomMindfulQuote = async function () {
-  return getRandomQuote({tags: MINDFUL_TAGS})
+const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
+  const url = `https://quote-garden.onrender.com/api/v3/quotes/random?genre=${genre}`;
+  const { data }: QuoteGardenResponse = await processFetchRequest(url);
+  return {content: data?.[0]?.quoteText, author: data?.[0]?.quoteAuthor};
 }
 
 export default {
-  getQuotes,
-  getRandomQuote,
-  getRandomMindfulQuote,
+  getRandomQuote
 };

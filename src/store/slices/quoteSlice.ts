@@ -13,6 +13,7 @@ export const DEFAULT_FONT = roboto;
 export const TEXT_SHADOW = '1px 1px 2px #4C4E52';
 
 export const quoteInitialState = {
+    quoteGenre: "life",
     text: '',
     color: 'white',
     fontSize: 23,
@@ -25,6 +26,9 @@ export const quoteSlice = createSlice({
   name: 'quote',
   initialState: quoteInitialState,
   reducers: {
+    setQuoteGenre: (state, action) => {
+        state.quoteGenre = action.payload;
+    },
     setText: (state, action) => {
         state.text = action.payload;
     },
@@ -59,6 +63,7 @@ export const quoteSlice = createSlice({
 });
 
 export const { 
+    setQuoteGenre,
     setText, 
     setColor, 
     setFontSize, 
@@ -66,6 +71,7 @@ export const {
     setFontStyles, 
     setTextShadowState 
 } = quoteSlice.actions;
+export const selectQuoteGenre = (state: State) => state.quote?.quoteGenre;
 export const selectText = (state: State) => state.quote?.text;
 export const selectColor = (state: State) => state.quote?.color;
 export const selectFontSize = (state: State) => state.quote?.fontSize;

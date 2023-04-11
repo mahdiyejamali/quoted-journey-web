@@ -6,6 +6,7 @@ import ShadowSwitch from "./ShadowSwitch";
 import styled from '@emotion/styled';
 import ThemeSelect from "./ThemeSelect";
 import { ChevronLeft } from "@mui/icons-material";
+import QuoteGenreSelect from "./QuoteGenreSelect";
 
 const SideBarWrapper = styled.div`
     width: 400px;
@@ -45,6 +46,10 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
             <SideBarWrapper>
                 <SideBarItem>
                     <FontSizeSlider />
+                </SideBarItem>
+
+                <SideBarItem>
+                    <QuoteGenreSelect />
                 </SideBarItem>
 
                 <SideBarItem>
