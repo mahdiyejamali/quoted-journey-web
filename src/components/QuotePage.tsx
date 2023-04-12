@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import shortid from 'shortid';
 
 import { Fab } from '@mui/material';
-import { Download, MusicNote, MusicOff, Settings } from '@mui/icons-material';
+import { Download, Favorite, MusicNote, MusicOff, Settings } from '@mui/icons-material';
 
 import quotable from '@/providers/quotable';
 import hooks from '@/hooks';
@@ -68,14 +68,16 @@ export default function QuotePage() {
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
 
-    const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas({
+    const createCanvasProps = {
         backgroundSrcImage,
         fontStyles,
         fontSize,
         textColor,
         textShadowState,
         currentQuote,
-    });
+    };
+    const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
+    const [handleImageUpload, saveImageToFirestore] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
     useEffect(() => {
         fetchData();
@@ -90,6 +92,10 @@ export default function QuotePage() {
 
     const toggleQuoteSideBar = () => {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
+    };
+
+    const handleSaveImage = async () => {
+        const imageUrl = await handleImageUpload();
     };
 
     return (
@@ -142,9 +148,12 @@ export default function QuotePage() {
                     )
                 }} />
 
-                {/* <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => event.stopPropagation()}>
+                <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => {
+                    event.stopPropagation();
+                    handleSaveImage();
+                }}>
                     <Favorite />
-                </Fab> */}
+                </Fab>
             </MainButtonsWrapper>
 
             <QuoteSideBar isOpen={isQuoteSideBarOpen} toggleSideBar={toggleQuoteSideBar} />

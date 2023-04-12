@@ -1,5 +1,5 @@
 import { FontStyles } from "@/store/store";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 
 function loadImage(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
@@ -37,8 +37,7 @@ function wrapText(context: CanvasRenderingContext2D, text: string, x: number, y:
     }
 }
 
-
-interface UseHtml2CanvasProps {
+export interface Html2CanvasProps {
     backgroundSrcImage: string,
     fontStyles: FontStyles,
     fontSize: number,
@@ -46,7 +45,8 @@ interface UseHtml2CanvasProps {
     textShadowState: boolean,
     currentQuote: string,
 }
-export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
+
+export async function createImageCanvas(elementRef: RefObject<HTMLDivElement>, params: Html2CanvasProps) {
     const {
         backgroundSrcImage,
         fontStyles,
@@ -54,20 +54,17 @@ export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
         textColor,
         textShadowState,
         currentQuote,
-    } = props
+    } = params;
 
-    const downloadElementRef = useRef<HTMLDivElement>(null);
-    const downloadElement = async () => {
-        const element = downloadElementRef.current;
-      
-        if (element) {
-          const canvas = document.createElement("canvas");
-          canvas.width = element.offsetWidth;
-          canvas.height = element.offsetHeight;
-      
-          const ctx = canvas.getContext("2d");
-      
-          if (ctx) {
+    const element = elementRef.current;
+    if (element) {
+        const canvas = document.createElement("canvas");
+        canvas.width = element.offsetWidth;
+        canvas.height = element.offsetHeight;
+    
+        const ctx = canvas.getContext("2d");
+    
+        if (ctx) {
             // Draw background image
             const backgroundImg = await loadImage(backgroundSrcImage);
             ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
@@ -80,7 +77,19 @@ export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
             ctx.shadowOffsetY = 1;
             ctx.shadowBlur = 2;
             wrapText(ctx, currentQuote, canvas.width * 0.2, canvas.height * 0.3, canvas.width * 0.6, fontSize * 1.5);
-        
+        }
+
+        return canvas;
+    }
+
+    return null;
+}
+
+export default function useHtml2Canvas(props: Html2CanvasProps) {
+    const downloadElementRef = useRef<HTMLDivElement>(null);
+    const downloadElement = async () => {      
+        const canvas = await createImageCanvas(downloadElementRef, props);
+        if (canvas) {
             // Download image
             const dataURL = canvas.toDataURL("image/png");
             const link = document.createElement("a");
@@ -89,7 +98,6 @@ export default function useHtml2Canvas(props: UseHtml2CanvasProps) {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-          }
         }
     };
 
