@@ -58,6 +58,7 @@ const makeStore = () =>
             [themeSlice.name]: themeSlice.reducer,
         },
         preloadedState: reHydrateStore(),
+        // @ts-ignore
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(localStorageMiddleware),
         devTools: true,
     });
