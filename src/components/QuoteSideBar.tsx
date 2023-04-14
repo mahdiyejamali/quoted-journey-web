@@ -1,4 +1,4 @@
-import { Drawer, IconButton } from "@mui/material";
+import { Button, Drawer, IconButton } from "@mui/material";
 import ColorSelect from "./ColorSelect";
 import FontSelect from "./FontSelect";
 import FontSizeSlider from "./FontSizeSlider";
@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import ThemeSelect from "./ThemeSelect";
 import { ChevronLeft } from "@mui/icons-material";
 import QuoteGenreSelect from "./QuoteGenreSelect";
+import Link from "next/link";
 
 const SideBarWrapper = styled.div`
     width: 400px;
@@ -62,6 +63,10 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
 
                 <SideBarItem>
                     <ColorSelect />
+                </SideBarItem>
+
+                <SideBarItem>
+                    <Button variant="outlined"><Link href="/favorites">Favotites</Link></Button>
                 </SideBarItem>
 
                 <SideBarItem>
