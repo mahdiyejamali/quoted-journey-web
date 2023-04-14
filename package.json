@@ -19,6 +19,7 @@
     "@types/react-dom": "18.0.11",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
+    "file-saver": "^2.0.5",
     "firebase": "^9.19.1",
     "html-to-image": "^1.11.11",
     "html2canvas": "^1.4.1",
@@ -34,6 +35,7 @@
     "typescript": "5.0.3"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/react-color": "^3.0.6",
     "@types/shortid": "^0.0.29"
   }

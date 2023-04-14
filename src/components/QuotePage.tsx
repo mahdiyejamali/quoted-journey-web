@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import shortid from 'shortid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Fab } from '@mui/material';
 import { Download, Favorite, MusicNote, MusicOff, Settings } from '@mui/icons-material';
@@ -77,7 +79,7 @@ export default function QuotePage() {
         currentQuote,
     };
     const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
-    const [handleImageUpload, saveImageToFirestore] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
+    const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
     useEffect(() => {
         fetchData();
@@ -94,8 +96,14 @@ export default function QuotePage() {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
     };
 
+    const showToastMessage = (message: string) => {
+        toast.success(message, {
+            position: toast.POSITION.TOP_RIGHT
+        });
+    };
     const handleSaveImage = async () => {
         const imageUrl = await handleImageUpload();
+        imageUrl && showToastMessage('Successfully saved to favorites.');
     };
 
     return (
@@ -107,6 +115,7 @@ export default function QuotePage() {
                 }, 850);
             }}
         >
+            <ToastContainer />
             <div ref={downloadElementRef}>
                 <BackgroundImageWrapper className="w-64 h-32 relative">
                     <NextImage key={shortid.generate()} style={{objectFit: 'cover'}} src={backgroundSrcImage} alt="background image" fill />

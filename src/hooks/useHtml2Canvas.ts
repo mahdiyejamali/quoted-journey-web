@@ -1,7 +1,7 @@
 import { FontStyles } from "@/store/store";
 import { RefObject, useRef } from "react";
 
-function loadImage(url: string): Promise<HTMLImageElement> {
+export function loadImageByUrl(url: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = () => resolve(img);
@@ -66,7 +66,7 @@ export async function createImageCanvas(elementRef: RefObject<HTMLDivElement>, p
     
         if (ctx) {
             // Draw background image
-            const backgroundImg = await loadImage(backgroundSrcImage);
+            const backgroundImg = await loadImageByUrl(backgroundSrcImage);
             ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
         
             // Draw text
@@ -85,20 +85,24 @@ export async function createImageCanvas(elementRef: RefObject<HTMLDivElement>, p
     return null;
 }
 
+export const downloadCanvas = (canvas: HTMLCanvasElement | null) => {
+    if (canvas) {
+        // Download image
+        const dataURL = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "quote.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
 export default function useHtml2Canvas(props: Html2CanvasProps) {
     const downloadElementRef = useRef<HTMLDivElement>(null);
     const downloadElement = async () => {      
         const canvas = await createImageCanvas(downloadElementRef, props);
-        if (canvas) {
-            // Download image
-            const dataURL = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.href = dataURL;
-            link.download = "quote.png";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        downloadCanvas(canvas);
     };
 
     return [downloadElementRef, downloadElement] as const;

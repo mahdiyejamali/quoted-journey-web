@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { getFirestore, collection, serverTimestamp, addDoc } from 'firebase/firestore';
 import firebaseApp from '../firebase/config';
 import { getAuth } from 'firebase/auth';
+import useFirestore from './useFirestore';
 
 function dataURLtoBlob(dataUrl: string) {
     const arr = dataUrl.split(',');
@@ -18,28 +19,30 @@ function dataURLtoBlob(dataUrl: string) {
 }
 
 export default function useUploadImage(elementRef: RefObject<HTMLDivElement>, props: Html2CanvasProps) {
+    const {getUserAnonymousUID} = useFirestore();
+
     const handleImageUpload = async () => {
-        const auth = getAuth(firebaseApp);
         const storage = getStorage(firebaseApp);
         const firestore = getFirestore(firebaseApp);
         const canvas = await createImageCanvas(elementRef, props);
         if (canvas) {
             try {
+                const uid = await getUserAnonymousUID();
                 const canvasBlob = dataURLtoBlob(canvas.toDataURL());
 
                 // Save image in cloud storage and get a URL
-                const filename = 'images/' + new Date().getTime() + 'canvas.png';
+                const filename = 'images/' + new Date().getTime() + '-canvas.png';
                 const storageReference = ref(storage, filename);
                 await uploadBytesResumable(storageReference, canvasBlob);
                 const downloadURL = await getDownloadURL(storageReference);
                 
                 // Save image URL in cloud storage
                 const docRef = await addDoc(collection(firestore, "images"), {
-                    uid: auth.currentUser?.uid,
+                    uid,
+                    filename,
                     downloadURL,
                     createdAt: serverTimestamp(),
                 });
-                console.log("Document written with ID: ", docRef.id);
 
                 return downloadURL;
             } catch (e) {
