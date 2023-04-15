@@ -18,7 +18,11 @@ export default function QuoteGenreSelect() {
             label="Quote Genre"
             onChange={(event) => handleChange(event.target.value)}
             >
-                {QUOTE_GARDEN_GENRES.map(item => <MenuItem key={item} value={item}>{item.toUpperCase()}</MenuItem>)}
+                {QUOTE_GARDEN_GENRES.map(item => (
+                    <MenuItem key={item} value={item}>
+                        {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </MenuItem>
+                ))}
             </Select>
         </FormControl>
     );

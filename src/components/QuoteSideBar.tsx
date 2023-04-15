@@ -1,13 +1,12 @@
-import { Button, Drawer, FormControlLabel, IconButton } from "@mui/material";
+import { Drawer, IconButton } from "@mui/material";
 import ColorSelect from "./ColorSelect";
 import FontSelect from "./FontSelect";
 import FontSizeSlider from "./FontSizeSlider";
 import ShadowSwitch from "./ShadowSwitch";
 import styled from '@emotion/styled';
 import ThemeSelect from "./ThemeSelect";
-import { ChevronLeft, Image as ImageIcon } from "@mui/icons-material";
+import { ChevronLeft } from "@mui/icons-material";
 import QuoteGenreSelect from "./QuoteGenreSelect";
-import Link from "next/link";
 
 const SideBarWrapper = styled.div`
     width: 400px;
@@ -39,18 +38,12 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
             }}
             onClick={(event) => event.stopPropagation()}
         >
-            <div>
-                <IconButton onClick={toggleSideBar}>
+            <div style={{marginTop: '5px', marginLeft: '5px'}}>
+                <IconButton size="large" onClick={toggleSideBar}>
                     <ChevronLeft />
                 </IconButton>
             </div>
             <SideBarWrapper>
-                <SideBarItem>
-                    <Link href="/favorites"><Button variant="outlined" onClick={(event) => event.stopPropagation()}>
-                        <ImageIcon style={{marginRight: 5}} />Favorites</Button>
-                    </Link>
-                </SideBarItem>
-
                 <SideBarItem>
                     <FontSizeSlider />
                 </SideBarItem>

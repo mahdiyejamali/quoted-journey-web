@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { Delete, Download } from "@mui/icons-material";
 
 const Wrapper = styled.div`
-    margin: 5%;
+    margin: 9% 5% 5% 5%;
 `;
 
 const ButtonsWrapper = styled.div`

@@ -1,15 +1,42 @@
 import '@/styles/globals.css'
+import styled from '@emotion/styled';
+import { Home, Image as ImageIcon } from '@mui/icons-material';
+import { createTheme, Fab, ThemeProvider } from '@mui/material';
 import type { AppProps } from 'next/app'
 import Head from 'next/head';
+import Link from 'next/link';
 import { Provider } from 'react-redux';
 import { wrapper } from '../store/store';
 
+const Header = styled.div`
+    position: absolute;
+    z-index: 1;
+    top: 5%;
+    left: 4%;
+`;
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#1D96D4",
+      light: "#4AABDC",
+      dark: "#146994",
+      contrastText: "#FFFFFF"
+    },
+    secondary: {
+      main: "#F50057",
+      light: "#F73378",
+      dark: "#AB003C",
+      contrastText: "#FFFFFF"
+    }
+  },
+});
 
 export default function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
 
   return (
+    <ThemeProvider theme={theme}>
     <Provider store={store}>
       <main>
         <Head>
@@ -18,8 +45,19 @@ export default function App({ Component, ...rest }: AppProps) {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/flower-1.svg" />
         </Head>
-        <Component {...pageProps} />
+        <>
+          <Header>
+            <Fab size="medium" color="primary" style={{marginRight: 20}} aria-label="home">
+              <Link href="/"><Home style={{marginTop: 3}} /></Link>
+            </Fab>
+            <Fab size="medium" color="primary" aria-label="favorites">
+              <Link href="/favorites"><ImageIcon style={{marginTop: 5}} /></Link>
+            </Fab>
+          </Header>
+          <Component {...pageProps} />
+        </>
       </main>
     </Provider>
+    </ThemeProvider>
   );
 }

@@ -104,8 +104,6 @@ export default function QuotePage() {
         fetchData();
     }, [fetchData])
 
-    
-
     const toggleQuoteSideBar = () => {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
     };
@@ -116,8 +114,8 @@ export default function QuotePage() {
         });
     };
     const handleSaveImage = async () => {
+        showToastMessage('Saving quote to your favorites...');
         const imageUrl = await handleImageUpload();
-        imageUrl && showToastMessage('Quote was saved to favorites.');
     };
 
     return (

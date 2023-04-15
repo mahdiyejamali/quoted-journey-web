@@ -24,7 +24,7 @@ export default function ColorSelect() {
     const handleChange = (color: {hex: string}) => dispatch(setColor(color.hex));
 
     return <>
-        <Fab ref={buttonRef} aria-label="like" onClick={() => setIsOpen(!isOpen)}>
+        <Fab color="primary" ref={buttonRef} aria-label="like" onClick={() => setIsOpen(!isOpen)}>
             <Colorize />
         </Fab>
 
