@@ -13,9 +13,6 @@ const THEMES = [
     '/bg-7.jpg',
     '/bg-8.jpg',
     '/bg-9.jpg',
-    '/bg-10.jpg',
-    '/bg-11.jpg',
-    '/bg-12.jpg',
 ];
 
 export default function ThemeSelect() {
