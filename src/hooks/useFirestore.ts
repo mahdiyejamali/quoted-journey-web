@@ -1,7 +1,7 @@
 import { getAuth, signInAnonymously } from "firebase/auth";
-import { collection, deleteDoc, doc, DocumentData, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { collection, deleteDoc, DocumentData, getDocs, getFirestore, query, where } from "firebase/firestore";
 import { deleteObject, getDownloadURL, getStorage, ref } from "firebase/storage";
-import firebaseApp from '../firebase/config';
+import firebaseApp from "../firebase/config";
 import {saveAs} from "file-saver";
 
 export default function useFirestore() {
@@ -56,8 +56,8 @@ export default function useFirestore() {
             xhr.open('GET', url);
             xhr.send();
         })
-        .catch((error) => {
-            // Handle any errors
+        .catch(e => {
+            console.log('downloadImage', e)
         });
     }
 

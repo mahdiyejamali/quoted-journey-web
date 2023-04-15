@@ -3,7 +3,6 @@ import { createImageCanvas, Html2CanvasProps } from './useHtml2Canvas';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { getFirestore, collection, serverTimestamp, addDoc } from 'firebase/firestore';
 import firebaseApp from '../firebase/config';
-import { getAuth } from 'firebase/auth';
 import useFirestore from './useFirestore';
 
 function dataURLtoBlob(dataUrl: string) {

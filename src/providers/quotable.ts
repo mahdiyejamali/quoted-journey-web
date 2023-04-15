@@ -7,18 +7,18 @@ export interface QuoteResponse {
 }
 
 export const QUOTE_GARDEN_GENRES = [
-  "art",
-  "attitude",
+  // "art",
+  // "attitude",
   "beauty",
   "change", 
   "courage",
   "dreams",
-  "experience",
-  "failure",
-  "faith",
-  "fear",
-  "forgiveness",
-  "freedom",
+  // "experience",
+  // "failure",
+  // "faith",
+  // "fear",
+  // "forgiveness",
+  // "freedom",
   "friendship",
   "happiness",
   "hope",
@@ -29,8 +29,8 @@ export const QUOTE_GARDEN_GENRES = [
   "nature",
   "peace",
   "positive",
-  "smile",
-  "travel"
+  // "smile",
+  // "travel"
 ] as const;
 
 export type QuoteGardenGenre = typeof QUOTE_GARDEN_GENRES[number];
@@ -50,7 +50,7 @@ interface QuoteGardenResponse {
   }[]
 }
 
-const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
+export const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
   const url = `https://quote-garden.onrender.com/api/v3/quotes/random?genre=${genre}`;
   const response: QuoteGardenResponse = await processFetchRequest(url);
   if (!response) {
@@ -61,7 +61,3 @@ const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promis
   const { data } = response;
   return {content: data?.[0]?.quoteText, author: data?.[0]?.quoteAuthor};
 }
-
-export default {
-  getRandomQuote
-};

@@ -4,4 +4,5 @@ import useClickOutside from "./useClickOutside";
 import useUploadImage from "./useUploadImage";
 import useFirestore from "./useFirestore";
 
-export default { useMountTransition, useHtml2Canvas, useClickOutside, useUploadImage, useFirestore };
+const hooks = { useMountTransition, useHtml2Canvas, useClickOutside, useUploadImage, useFirestore };
+export default hooks;

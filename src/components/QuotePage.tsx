@@ -1,27 +1,34 @@
-import NextImage from 'next/image'
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
-import shortid from 'shortid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Fab } from '@mui/material';
-import { Download, Favorite, MusicNote, MusicOff, Settings } from '@mui/icons-material';
+import { Download, Favorite, MusicNote, MusicOff, Palette } from '@mui/icons-material';
 
-import quotable from '@/providers/quotable';
+import { getRandomQuote } from '@/providers/quotable';
 import hooks from '@/hooks';
 import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectQuoteGenre, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
 import { selectSrcImage } from '@/store/slices/themeSlice';
 import QuoteSideBar from '@/components/QuoteSideBar';
 import AudioPlayer from './AudioPlayer';
+import dynamic from 'next/dynamic';
+import { useImageSize } from 'react-image-size';
 
-const BackgroundImageWrapper = styled.div`
-    z-index: -100;
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
+const BackgroundImage = dynamic(() => import("./BackgroundImage"), {
+    ssr: false,
+    loading: () => <p>...</p>,
+});
 
 const MainButtonsWrapper = styled.div`
     position: absolute;
@@ -45,7 +52,7 @@ const QuoteWrapper = styled.div`
     
     .quote-text {
         position: absolute;
-        z-index: -1;
+        z-index: 1;
         top: 30%;
         left: 20%;
         right: 20%;
@@ -70,6 +77,7 @@ export default function QuotePage() {
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
 
+    const [dimensions, { loading, error }] = useImageSize(backgroundSrcImage);
     const createCanvasProps = {
         backgroundSrcImage,
         fontStyles,
@@ -77,20 +85,26 @@ export default function QuotePage() {
         textColor,
         textShadowState,
         currentQuote,
+        imageSize: {
+            width: dimensions?.width ? dimensions.width / 1.5 : 0, 
+            height: dimensions?.height ? dimensions.height / 1.5 : 0
+        },
     };
     const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
     const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
-    useEffect(() => {
-        fetchData();
-    }, [])
-
-    async function fetchData() {
-        const response = await quotable.getRandomQuote(quoteGenre);
-        const author = response?.author ? `\n\n--${response?.author}` : ''
+    const fetchData = useCallback(async () => {
+        const response = await getRandomQuote(quoteGenre);
+        const author = response?.author ? `\n\n--${response?.author}` : '';
         dispatch(setText(`${response.content}${author}`));
         setIsMounted(true);
-    }
+    }, [dispatch, quoteGenre]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData])
+
+    
 
     const toggleQuoteSideBar = () => {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
@@ -103,7 +117,7 @@ export default function QuotePage() {
     };
     const handleSaveImage = async () => {
         const imageUrl = await handleImageUpload();
-        imageUrl && showToastMessage('Successfully saved to favorites.');
+        imageUrl && showToastMessage('Quote was saved to favorites.');
     };
 
     return (
@@ -116,11 +130,7 @@ export default function QuotePage() {
             }}
         >
             <ToastContainer />
-            <div ref={downloadElementRef}>
-                <BackgroundImageWrapper className="w-64 h-32 relative">
-                    <NextImage key={shortid.generate()} style={{objectFit: 'cover'}} src={backgroundSrcImage} alt="background image" fill />
-                </BackgroundImageWrapper>
-
+            <Wrapper ref={downloadElementRef}>
                 {(hasTransitionedIn || isMounted) && <QuoteWrapper>
                     <div
                         className={`${fontClassName} quote ${hasTransitionedIn && 'in'} ${isMounted && 'visible'} quote-text`}
@@ -129,14 +139,16 @@ export default function QuotePage() {
                         {currentQuote}
                     </div>
                 </QuoteWrapper>}
-            </div>
+
+                <BackgroundImage />
+            </Wrapper>
 
             <MainButtonsWrapper>
                 <Fab aria-label="settings" onClick={(event) => {
                     event.stopPropagation()
                     toggleQuoteSideBar();
                 }}>
-                    <Settings />
+                    <Palette />
                 </Fab>
 
                 <Fab style={{marginLeft: 20}} aria-label="download" onClick={(event) => {
@@ -144,6 +156,13 @@ export default function QuotePage() {
                     downloadElement();
                 }}>
                     <Download />
+                </Fab>
+
+                <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => {
+                    event.stopPropagation();
+                    handleSaveImage();
+                }}>
+                    <Favorite />
                 </Fab>
 
                 <AudioPlayer renderButton={(musicState, toggleMusic) => {
@@ -156,13 +175,6 @@ export default function QuotePage() {
                         </Fab>
                     )
                 }} />
-
-                <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => {
-                    event.stopPropagation();
-                    handleSaveImage();
-                }}>
-                    <Favorite />
-                </Fab>
             </MainButtonsWrapper>
 
             <QuoteSideBar isOpen={isQuoteSideBarOpen} toggleSideBar={toggleQuoteSideBar} />

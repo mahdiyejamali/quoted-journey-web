@@ -5,11 +5,13 @@ import QuotePage from './QuotePage';
 import ShadowSwitch from './ShadowSwitch';
 import SideBar from './QuoteSideBar';
 
-export default {
+const components = {
     ColorSelect,
     FontSelect,
     FontSizeSlider,
     QuotePage,
     ShadowSwitch,
     SideBar,
-}
+};
+
+export default components;

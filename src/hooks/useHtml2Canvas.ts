@@ -44,6 +44,7 @@ export interface Html2CanvasProps {
     textColor: string,
     textShadowState: boolean,
     currentQuote: string,
+    imageSize: {width: number, height: number}
 }
 
 export async function createImageCanvas(elementRef: RefObject<HTMLDivElement>, params: Html2CanvasProps) {
@@ -54,13 +55,13 @@ export async function createImageCanvas(elementRef: RefObject<HTMLDivElement>, p
         textColor,
         textShadowState,
         currentQuote,
+        imageSize,
     } = params;
-
     const element = elementRef.current;
     if (element) {
         const canvas = document.createElement("canvas");
-        canvas.width = element.offsetWidth;
-        canvas.height = element.offsetHeight;
+        canvas.width = imageSize.width;
+        canvas.height = imageSize.height;
     
         const ctx = canvas.getContext("2d");
     
