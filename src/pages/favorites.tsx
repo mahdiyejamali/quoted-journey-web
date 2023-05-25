@@ -37,11 +37,12 @@ export default function FavoritesPage() {
     return (
         <Wrapper>
             {showEmptyText && 
-                <Typography variant="h6" component="h2">
+                <Typography variant="h6" component="h2" paddingTop="10px">
                     You have no images saved in Favotites.
                 </Typography>
             }
-            {!!favoriteImages.length && <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+
+            {!!favoriteImages.length && <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop="10px">
                 {favoriteImages.map((image) => (
                     <Grid item xs={2} sm={4} md={4} key={image.filename}>
                         <Card sx={{ maxWidth: '100%' }}>

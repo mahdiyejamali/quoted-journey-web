@@ -1,36 +1,21 @@
 import { processFetchRequest } from '../utils';
 import { affirmations } from "../constants/affirmations"
+import { useSelector } from 'react-redux';
+import { selectQuotes } from '@/store/slices/customQuoteSlice';
 
 export interface QuoteResponse {
   content: string;
   author?: string;
 }
 
+export const CUSTOM_QUOTES_GENRE = 'My Quotes';
 export const QUOTE_GARDEN_GENRES = [
-  // "art",
-  // "attitude",
-  "beauty",
-  "change", 
-  "courage",
-  "dreams",
-  // "experience",
-  // "failure",
-  // "faith",
-  // "fear",
-  // "forgiveness",
-  // "freedom",
-  "friendship",
-  "happiness",
-  "hope",
-  "imagination",
-  "inspirational",
-  "life",
-  "motivational",
-  "nature",
-  "peace",
-  "positive",
-  // "smile",
-  // "travel"
+  CUSTOM_QUOTES_GENRE,
+  'affirmations',
+  'inspirational',
+  'life',
+  'motivational',
+  'peace',
 ] as const;
 
 export type QuoteGardenGenre = typeof QUOTE_GARDEN_GENRES[number];
@@ -42,7 +27,8 @@ interface QuoteGardenParams {
   page?: number;
   limit?: number;
 }
-interface QuoteGardenResponse {
+
+export interface QuoteGardenResponse {
   data: {
     quoteText: string;
     quoteAuthor?: string;
@@ -50,14 +36,33 @@ interface QuoteGardenResponse {
   }[]
 }
 
-export const getRandomQuote = async function (genre: QuoteGardenGenre = "life"): Promise<QuoteResponse> {
-  const url = `https://quote-garden.onrender.com/api/v3/quotes/random?genre=${genre}`;
-  const response: QuoteGardenResponse = await processFetchRequest(url);
-  if (!response) {
-    const randomStaticQuote = affirmations[Math.floor(Math.random()*affirmations.length)];
-    return {content: randomStaticQuote}
+export function getRandomInt(min: number, max: number) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
+export const getRandomQuote = async function (genre: QuoteGardenGenre | CUSTOM_QUOTES_GENRE = "life", customQuotes?: string[]): Promise<QuoteResponse> {
+  if (genre == CUSTOM_QUOTES_GENRE) {
+    let content = 'Your quotes list is empty.'
+    
+    if (customQuotes?.length) {
+      let randomIndex = getRandomInt(0, customQuotes.length);
+      content = customQuotes[randomIndex];
+    }
+    
+    return {content};
   }
 
-  const { data } = response;
-  return {content: data?.[0]?.quoteText, author: data?.[0]?.quoteAuthor};
+  const response: QuoteGardenResponse = await processFetchRequest(`/api/quotes?genre=${genre}`);
+  
+  if (!response) {
+    let randomIndex = getRandomInt(0, affirmations.length);
+    return {content: affirmations[randomIndex]}
+  }
+
+  let {data = []} = response;
+  let randomIndex = getRandomInt(0, data.length);
+  
+  return {content: data?.[randomIndex]?.quoteText, author: data?.[randomIndex]?.quoteAuthor};
 }

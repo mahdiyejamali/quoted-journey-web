@@ -13,10 +13,11 @@ export default function QuoteGenreSelect() {
         <FormControl fullWidth>
             <InputLabel>Quote Genre</InputLabel>
             <Select
-            labelId="quote-genre-select-label"
-            value={quoteGenre}
-            label="Quote Genre"
-            onChange={(event) => handleChange(event.target.value)}
+                labelId="quote-genre-select-label"
+                value={quoteGenre}
+                label="Quote Genre"
+                size="small"
+                onChange={(event) => handleChange(event.target.value)}
             >
                 {QUOTE_GARDEN_GENRES.map(item => (
                     <MenuItem key={item} value={item}>

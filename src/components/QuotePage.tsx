@@ -15,6 +15,7 @@ import QuoteSideBar from '@/components/QuoteSideBar';
 import AudioPlayer from './AudioPlayer';
 import dynamic from 'next/dynamic';
 import { useImageSize } from 'react-image-size';
+import { selectQuotes } from '@/store/slices/customQuoteSlice';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -77,6 +78,8 @@ export default function QuotePage() {
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
 
+    const customQuotes = useSelector(selectQuotes);
+
     const [dimensions, { loading, error }] = useImageSize(backgroundSrcImage);
     const createCanvasProps = {
         backgroundSrcImage,
@@ -94,7 +97,7 @@ export default function QuotePage() {
     const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
     const fetchData = useCallback(async () => {
-        const response = await getRandomQuote(quoteGenre);
+        const response = await getRandomQuote(quoteGenre, customQuotes);
         const author = response?.author ? `\n\n--${response?.author}` : '';
         dispatch(setText(`${response.content}${author}`));
         setIsMounted(true);

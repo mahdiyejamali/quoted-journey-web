@@ -43,10 +43,11 @@ export default function FontSelect() {
         <FormControl fullWidth>
             <InputLabel>Font</InputLabel>
             <Select
-            labelId="font-select-label"
-            value={font}
-            label="Font"
-            onChange={(event) => handleChange(event.target.value)}
+                labelId="font-select-label"
+                value={font}
+                label="Font"
+                size="small"
+                onChange={(event) => handleChange(event.target.value)}
             >
                 {FONTS_LIST.map(item => (
                     <MenuItem key={item.title} value={item.value} onClick={() => onItemClick(item.style)}>

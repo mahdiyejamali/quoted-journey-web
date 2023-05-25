@@ -32,9 +32,9 @@ function BackgroundImage() {
 
     useEffect(() => {
         function handleResize() {
-        const { width, height } = getWindowDimensions();
-        setWidth(width);
-        setheight(height);
+            const { width, height } = getWindowDimensions();
+            setWidth(width);
+            setheight(height);
         }
 
         window.addEventListener("resize", handleResize);

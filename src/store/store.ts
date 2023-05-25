@@ -1,6 +1,7 @@
 import { QuoteGardenGenre } from '@/providers/quotable';
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
+import { customQuoteSlice, customQuoteInitialState } from './slices/customQuoteSlice';
 import { quoteSlice, quoteInitialState } from './slices/quoteSlice';
 import { themeSlice, themeInitialState } from './slices/themeSlice';
 
@@ -9,6 +10,7 @@ export const APPLICATION_STATE_KEY = 'applicationState';
 export interface State {
     'quote': QuoteState,
     'theme': ThemeState,
+    'customQuote': CustomQuoteState,
 }
 
 export interface FontStyles {
@@ -32,6 +34,10 @@ export interface ThemeState {
     musicState: boolean;
 }
 
+export interface CustomQuoteState {
+    quotes: string[];
+}
+
 const localStorageMiddleware = ({ getState }: {getState: () => State}) => {
     // @ts-ignore
     return next => action => {
@@ -48,6 +54,7 @@ const reHydrateStore = () => {
     return {
         quote: {...quoteInitialState, ...savedState.quote}, 
         theme: {...themeInitialState, ...savedState.theme},
+        customQuote: {...customQuoteInitialState, ...savedState.customQuote}
     };
 };
 
@@ -56,6 +63,7 @@ const makeStore = () =>
         reducer: {
             [quoteSlice.name]: quoteSlice.reducer,
             [themeSlice.name]: themeSlice.reducer,
+            [customQuoteSlice.name]: customQuoteSlice.reducer,
         },
         preloadedState: reHydrateStore(),
         // @ts-ignore

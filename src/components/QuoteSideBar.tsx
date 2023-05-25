@@ -13,9 +13,18 @@ const SideBarWrapper = styled.div`
 `;
 
 const SideBarItem =  styled.div`
-    margin-top: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+`;
+
+const SideBarItemsWrapper = styled.div`
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 20px;
     margin-right: 20px;
+    padding: 20px;
+    border: 1px solid #A0A0A0;
+    border-radius: 5px;
 `;
 
 
@@ -43,32 +52,34 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
                     <ChevronLeft />
                 </IconButton>
             </div>
+
             <SideBarWrapper>
-                <SideBarItem>
-                    <FontSizeSlider />
-                </SideBarItem>
+                <SideBarItemsWrapper>
+                    <SideBarItem>
+                        <FontSizeSlider />
+                    </SideBarItem>
 
-                <SideBarItem>
-                    <QuoteGenreSelect />
-                </SideBarItem>
+                    <SideBarItem>
+                        <QuoteGenreSelect />
+                    </SideBarItem>
 
-                <SideBarItem>
-                    <FontSelect />
-                </SideBarItem>
+                    <SideBarItem>
+                        <FontSelect />
+                    </SideBarItem>
 
-                <SideBarItem>
-                    <ShadowSwitch />
-                </SideBarItem>
+                    <SideBarItem>
+                        <ShadowSwitch />
+                    </SideBarItem>
 
-                <SideBarItem>
-                    <ColorSelect />
-                </SideBarItem>
+                    <SideBarItem>
+                        <ColorSelect />
+                    </SideBarItem>
+                </SideBarItemsWrapper>
 
-                <SideBarItem>
+                <SideBarItemsWrapper>
                     <ThemeSelect />
-                </SideBarItem>
+                </SideBarItemsWrapper>
 
-                <SideBarItem></SideBarItem>
             </SideBarWrapper>
         </Drawer>
     )
