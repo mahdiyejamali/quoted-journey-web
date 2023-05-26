@@ -7,8 +7,10 @@ export interface QuoteResponse {
 }
 
 export const CUSTOM_QUOTES_GENRE = 'My Quotes';
+export const FAVORITE_QUOTES_GENRE = 'Favorites';
 export const QUOTE_GARDEN_GENRES = [
   CUSTOM_QUOTES_GENRE,
+  FAVORITE_QUOTES_GENRE,
   'affirmations',
   'inspirational',
   'life',

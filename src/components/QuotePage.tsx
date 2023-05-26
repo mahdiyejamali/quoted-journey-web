@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { Fab } from '@mui/material';
-import { Download, Favorite, MusicNote, MusicOff, Palette } from '@mui/icons-material';
+import { Download, Favorite, FavoriteBorder, MusicNote, MusicOff, Palette } from '@mui/icons-material';
 
-import { getQuotesList, QuoteGenre } from '@/providers/quotable';
+import { FAVORITE_QUOTES_GENRE, getQuotesList, QuoteGenre } from '@/providers/quotable';
 import hooks from '@/hooks';
 import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectQuoteGenre, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
 import { selectSrcImage } from '@/store/slices/themeSlice';
@@ -16,6 +14,8 @@ import AudioPlayer from './AudioPlayer';
 import dynamic from 'next/dynamic';
 import { useImageSize } from 'react-image-size';
 import { selectQuotes } from '@/store/slices/customQuoteSlice';
+import useFavorite from '@/hooks/useFavorites';
+import { addFavorite, removeFavorite } from '@/store/slices/favoritesSlice';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -92,14 +92,18 @@ export default function QuotePage() {
         },
     };
     const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
-    const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
+    // const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
+    /** Fetch quotes list by genre */
     const customQuotes = useSelector(selectQuotes);
     const [quotesList, setQuotesList] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+    
+    const {favoriteQuotes, isFavoriteSaved} = useFavorite();
     const fetchData = useCallback(async (quoteGenre: QuoteGenre) => {
         try {
-          const response = await getQuotesList(quoteGenre, customQuotes);
+          let response = quoteGenre == FAVORITE_QUOTES_GENRE ? favoriteQuotes : await getQuotesList(quoteGenre, customQuotes);
+                    
           setQuotesList(response);
           setCurrentIndex(0);
 
@@ -108,7 +112,7 @@ export default function QuotePage() {
         } catch (e) {
           console.error('fetchData', e)
         }
-    }, [customQuotes, dispatch]);
+    }, [favoriteQuotes, quoteGenre, customQuotes, dispatch]);
   
     useEffect(() => {
         fetchData(quoteGenre);
@@ -119,7 +123,10 @@ export default function QuotePage() {
         setIsMounted(true);
     }, [currentIndex, quotesList, dispatch]);
 
+    /** Handle next/prev/enter functionalities */
     const onNext = useCallback((index: number) => {
+        if (quotesList.length <= 1) return;
+
         setIsMounted(false);
         setTimeout(() => {
             const nextIndex = index < quotesList.length - 1 ? index + 1 : 0;
@@ -128,6 +135,8 @@ export default function QuotePage() {
     }, [quotesList.length])
 
     const onPrev = useCallback((index: number) => {
+        if (quotesList.length <= 1) return;
+
         setIsMounted(false);
         setTimeout(() => {
             const prevIndex = index > 0 ? index - 1 : quotesList.length - 1;
@@ -155,23 +164,23 @@ export default function QuotePage() {
         }
     }, [currentIndex, onNext, onPrev]);
 
+    /** Handle toggle/toast functionality */
     const toggleQuoteSideBar = () => {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
     };
 
-    const showToastMessage = (message: string) => {
-        toast.success(message, {
-            position: toast.POSITION.TOP_RIGHT
-        });
-    };
-    const handleSaveImage = async () => {
-        showToastMessage('Saving quote to your favorites...');
-        const imageUrl = await handleImageUpload();
-    };
+    /** Handle favorite functionality */
+    const isFavorite = isFavoriteSaved(currentQuote);
+    const onPressFavorite = () => {
+        if (isFavorite) {
+            dispatch(removeFavorite(currentQuote))
+        } else {
+            dispatch(addFavorite(currentQuote))
+        }
+    }
 
     return (
         <div onClick={() => onNext(currentIndex)}>
-            <ToastContainer />
             <Wrapper ref={downloadElementRef}>
                 {(hasTransitionedIn || isMounted) && <QuoteWrapper>
                     <div
@@ -202,9 +211,10 @@ export default function QuotePage() {
 
                 <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => {
                     event.stopPropagation();
-                    handleSaveImage();
+                    // handleSaveImage();
+                    onPressFavorite();
                 }}>
-                    <Favorite />
+                    {isFavorite ? <Favorite /> : <FavoriteBorder />}
                 </Fab>
 
                 <AudioPlayer renderButton={(musicState, toggleMusic) => {

@@ -50,9 +50,9 @@ export default function App({ Component, ...rest }: AppProps) {
             <Fab size="medium" color="primary" style={{marginRight: 20}} aria-label="home">
               <Link href="/"><Home style={{marginTop: 3}} /></Link>
             </Fab>
-            <Fab size="medium" color="primary" style={{marginRight: 20}} aria-label="favorites">
+            {/* <Fab size="medium" color="primary" style={{marginRight: 20}} aria-label="favorites">
               <Link href="/favorites"><ImageIcon style={{marginTop: 5}} /></Link>
-            </Fab>
+            </Fab> */}
             <Fab size="medium" color="primary" aria-label="favorites">
               <Link href="/custom-quotes"><EditNote style={{marginTop: 7, marginLeft: 5}} /></Link>
             </Fab>

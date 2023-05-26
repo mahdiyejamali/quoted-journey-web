@@ -60,10 +60,6 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
                     </SideBarItem>
 
                     <SideBarItem>
-                        <QuoteGenreSelect />
-                    </SideBarItem>
-
-                    <SideBarItem>
                         <FontSelect />
                     </SideBarItem>
 
@@ -74,6 +70,10 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
                     <SideBarItem>
                         <ColorSelect />
                     </SideBarItem>
+                </SideBarItemsWrapper>
+
+                <SideBarItemsWrapper>
+                    <QuoteGenreSelect />
                 </SideBarItemsWrapper>
 
                 <SideBarItemsWrapper>

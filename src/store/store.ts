@@ -2,6 +2,7 @@ import { QuoteGenre } from '@/providers/quotable';
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { customQuoteSlice, customQuoteInitialState } from './slices/customQuoteSlice';
+import { favoritesInitialState, favoritesSlice } from './slices/favoritesSlice';
 import { quoteSlice, quoteInitialState } from './slices/quoteSlice';
 import { themeSlice, themeInitialState } from './slices/themeSlice';
 
@@ -11,6 +12,7 @@ export interface State {
     'quote': QuoteState,
     'theme': ThemeState,
     'customQuote': CustomQuoteState,
+    'favorites': FavoritesState,
 }
 
 export interface FontStyles {
@@ -38,6 +40,10 @@ export interface CustomQuoteState {
     quotes: string[];
 }
 
+export interface FavoritesState {
+    saved: {[key: string]: boolean};
+}
+
 const localStorageMiddleware = ({ getState }: {getState: () => State}) => {
     // @ts-ignore
     return next => action => {
@@ -54,7 +60,8 @@ const reHydrateStore = () => {
     return {
         quote: {...quoteInitialState, ...savedState.quote}, 
         theme: {...themeInitialState, ...savedState.theme},
-        customQuote: {...customQuoteInitialState, ...savedState.customQuote}
+        customQuote: {...customQuoteInitialState, ...savedState.customQuote},
+        favorites: {...favoritesInitialState, ...savedState.favorites}
     };
 };
 
@@ -64,6 +71,7 @@ const makeStore = () =>
             [quoteSlice.name]: quoteSlice.reducer,
             [themeSlice.name]: themeSlice.reducer,
             [customQuoteSlice.name]: customQuoteSlice.reducer,
+            [favoritesSlice.name]: favoritesSlice.reducer,
         },
         preloadedState: reHydrateStore(),
         // @ts-ignore
