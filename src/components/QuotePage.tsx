@@ -34,9 +34,10 @@ const BackgroundImage = dynamic(() => import("./BackgroundImage"), {
 const MainButtonsWrapper = styled.div`
     position: absolute;
     bottom: 10%;
-    left: 10%;
+    left: 5%;
+    left: 5%;
     display: flex;
-    width: 60%;
+    width: 100%;
 `;
 
 const QuoteWrapper = styled.div`
@@ -202,21 +203,21 @@ export default function QuotePage() {
             </Wrapper>
 
             <MainButtonsWrapper>
-                <Fab aria-label="settings" onClick={(event) => {
+                <Fab size="medium" style={{minWidth: 48}} aria-label="settings" onClick={(event) => {
                     event.stopPropagation()
                     toggleQuoteSideBar();
                 }}>
                     <Palette />
                 </Fab>
 
-                <Fab style={{marginLeft: 20}} aria-label="download" onClick={(event) => {
+                <Fab size="medium" style={{minWidth: 48, marginLeft: 20}} aria-label="download" onClick={(event) => {
                     event.stopPropagation();
                     downloadElement();
                 }}>
                     <Download />
                 </Fab>
 
-                <Fab style={{marginLeft: 20}} aria-label="like" onClick={(event) => {
+                <Fab size="medium" style={{minWidth: 48, marginLeft: 20}} aria-label="like" onClick={(event) => {
                     event.stopPropagation();
                     // handleSaveImage();
                     onPressFavorite();
@@ -226,7 +227,7 @@ export default function QuotePage() {
 
                 <AudioPlayer renderButton={(musicState, toggleMusic) => {
                     return (
-                        <Fab style={{marginLeft: 20}} aria-label="sound" onClick={(event) => {
+                        <Fab size="medium" style={{minWidth: 48, marginLeft: 20}} aria-label="sound" onClick={(event) => {
                             event.stopPropagation();
                             toggleMusic();
                         }}>
