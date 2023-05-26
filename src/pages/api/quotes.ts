@@ -14,5 +14,5 @@ export default async function handler(
     const QUOTES_URL = `https://quoted-journey-api.vercel.app/quotes?genre=${req.query?.genre}`;
     const response = await processFetchRequest(QUOTES_URL);
 
-    res.status(200).json(response)
+    res.status(200).json(response);
 }
