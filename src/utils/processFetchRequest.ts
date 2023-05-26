@@ -1,6 +1,6 @@
 const processFetchRequest = async (url: any, timeout = 2000) => {  
   try {
-    const response = await fetch(url, { signal: AbortSignal.timeout(timeout) });
+    const response = await fetch(url);
     if (response.ok) {
       return response.json();
     }
