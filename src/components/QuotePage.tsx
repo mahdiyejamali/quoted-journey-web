@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { Fab } from '@mui/material';
 import { Download, Favorite, FavoriteBorder, MusicNote, MusicOff, Palette } from '@mui/icons-material';
 
-import { FAVORITE_QUOTES_GENRE, getQuotesList, QuoteGenre } from '@/providers/quotable';
+import { CUSTOM_QUOTES_GENRE, FAVORITE_QUOTES_GENRE, getQuotesList, QuoteGenre } from '@/providers/quotable';
 import hooks from '@/hooks';
 import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectQuoteGenre, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
 import { selectSrcImage } from '@/store/slices/themeSlice';
@@ -102,17 +102,24 @@ export default function QuotePage() {
     const {favoriteQuotes, isFavoriteSaved} = useFavorite();
     const fetchData = useCallback(async (quoteGenre: QuoteGenre) => {
         try {
-          let response = quoteGenre == FAVORITE_QUOTES_GENRE ? favoriteQuotes : await getQuotesList(quoteGenre, customQuotes);
+            let response;
+            if (quoteGenre == FAVORITE_QUOTES_GENRE) {
+                response = favoriteQuotes
+            } else if (quoteGenre == CUSTOM_QUOTES_GENRE) {
+                response = customQuotes
+            } else {
+                response =  await getQuotesList(quoteGenre);
+            }
                     
-          setQuotesList(response);
-          setCurrentIndex(0);
+            setQuotesList(response);
+            setCurrentIndex(0);
 
-          dispatch(setText(response[0]));
-          setIsMounted(true);
+            dispatch(setText(response[0]));
+            setIsMounted(true);
         } catch (e) {
-          console.error('fetchData', e)
+            console.error('fetchData', e)
         }
-    }, [favoriteQuotes, quoteGenre, customQuotes, dispatch]);
+    }, [quoteGenre, customQuotes, dispatch]);
   
     useEffect(() => {
         fetchData(quoteGenre);

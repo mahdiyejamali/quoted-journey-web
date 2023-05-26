@@ -48,16 +48,8 @@ export const createQuoteText = (quoteObj: QuoteResponse) => {
   return `${quoteObj.content}${author}`;
 }
 
-export const getQuotesList = async function (genre: QuoteGenre = 'life', customQuotes?: string[]): Promise<string[]> {
+export const getQuotesList = async function (genre: QuoteGenre = 'life'): Promise<string[]> {
   const LIMIT = 100;
-
-  if (genre == CUSTOM_QUOTES_GENRE) {
-    if (customQuotes) {
-      return customQuotes;
-    } else {
-      return ['Your custom quotes list is empty.']
-    }
-  }
 
   const response: QuoteGardenResponse = await processFetchRequest(`/api/quotes?genre=${genre}`);
   let quotesByGenre = response?.data;

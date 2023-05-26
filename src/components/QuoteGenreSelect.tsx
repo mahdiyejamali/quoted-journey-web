@@ -32,7 +32,7 @@ export default function QuoteGenreSelect() {
                             disabled={!isEnabled}
                             variant='outlined'
                             color='primary'
-                            style={{width: '9rem', padding: '15px', color: 'black', ...(isSelected ? {backgroundColor: '#4DD0E1'} : {})}}
+                            style={{width: '9rem', padding: '15px', color: isEnabled ? 'black' : 'grey', ...(isSelected ? {backgroundColor: '#4DD0E1'} : {})}}
                             onClick={() => handleChange(item)}
                         >{item.charAt(0).toUpperCase() + item.slice(1)}</Button>
                     </Grid>
