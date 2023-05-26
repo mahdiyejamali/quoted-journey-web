@@ -1,4 +1,4 @@
-import { QuoteGardenGenre } from '@/providers/quotable';
+import { QuoteGenre } from '@/providers/quotable';
 import { configureStore } from '@reduxjs/toolkit';
 import { createWrapper } from 'next-redux-wrapper';
 import { customQuoteSlice, customQuoteInitialState } from './slices/customQuoteSlice';
@@ -20,7 +20,7 @@ export interface FontStyles {
 }
 
 export interface QuoteState {
-    quoteGenre: QuoteGardenGenre;
+    quoteGenre: QuoteGenre;
     text: string;
     color: string;
     fontSize: number;

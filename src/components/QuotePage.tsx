@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Fab } from '@mui/material';
 import { Download, Favorite, MusicNote, MusicOff, Palette } from '@mui/icons-material';
 
-import { getRandomQuote } from '@/providers/quotable';
+import { getQuotesList, QuoteGenre } from '@/providers/quotable';
 import hooks from '@/hooks';
 import { selectColor, selectFontClassName, selectFontSize, selectFontStyles, selectQuoteGenre, selectText, selectTextShadowState, setText, TEXT_SHADOW } from '@/store/slices/quoteSlice';
 import { selectSrcImage } from '@/store/slices/themeSlice';
@@ -96,16 +96,66 @@ export default function QuotePage() {
     const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
     const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
-    const fetchData = useCallback(async () => {
-        const response = await getRandomQuote(quoteGenre, customQuotes);
-        const author = response?.author ? `\n\n--${response?.author}` : '';
-        dispatch(setText(`${response.content}${author}`));
-        setIsMounted(true);
-    }, [dispatch, quoteGenre]);
+    const [quotesList, setQuotesList] = useState<string[]>([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const fetchData = useCallback(async (quoteGenre: QuoteGenre) => {
+        try {
+          const response = await getQuotesList(quoteGenre, customQuotes);
+          setQuotesList(response);
+          setCurrentIndex(0);
+
+          dispatch(setText(response[0]));
+          setIsMounted(true);
+        } catch (e) {
+          console.error('fetchData', e)
+        }
+    }, [customQuotes, dispatch]);
+  
+    useEffect(() => {
+        fetchData(quoteGenre);
+    }, [quoteGenre, fetchData]);
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData])
+        console.log(currentIndex, quotesList[currentIndex])
+        dispatch(setText(quotesList[currentIndex]));
+        setIsMounted(true);
+    }, [currentIndex, quotesList, dispatch]);
+
+    const onNext = useCallback((index: number) => {
+        setIsMounted(false);
+        setTimeout(() => {
+            const nextIndex = index < quotesList.length - 1 ? index + 1 : 0;
+            setCurrentIndex(nextIndex)
+        }, 850);
+    }, [quotesList.length])
+
+    const onPrev = useCallback((index: number) => {
+        setIsMounted(false);
+        setTimeout(() => {
+            const prevIndex = index > 0 ? index - 1 : quotesList.length - 1;
+            setCurrentIndex(prevIndex)
+        }, 850);
+    }, [quotesList.length])
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key == 'ArrowUp') {
+                onNext(currentIndex);
+            } else if (e.key == 'ArrowDown') {
+                onPrev(currentIndex);
+            } else if (e.key == 'ArrowLeft') {
+                onPrev(currentIndex);
+            } else if (e.key == 'ArrowRight') {
+                onNext(currentIndex);
+            }
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [currentIndex, onNext, onPrev]);
 
     const toggleQuoteSideBar = () => {
         setIsQuoteSideBarOpen(!isQuoteSideBarOpen)
@@ -122,14 +172,7 @@ export default function QuotePage() {
     };
 
     return (
-        <div
-            onClick={() => {
-                setIsMounted(false);
-                setTimeout(() => {
-                    fetchData();
-                }, 850);
-            }}
-        >
+        <div onClick={() => onNext(currentIndex)}>
             <ToastContainer />
             <Wrapper ref={downloadElementRef}>
                 {(hasTransitionedIn || isMounted) && <QuoteWrapper>
