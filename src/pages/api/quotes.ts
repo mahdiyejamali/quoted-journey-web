@@ -11,7 +11,7 @@ export default async function handler(
         res.status(400).json({})
     }
 
-    const QUOTES_URL = `https://quoted-journey-api.vercel.app/quotes?genre=${req.query?.genre}`;
+    const QUOTES_URL = `https://quoted-journey-api.herokuapp.com/quotes?genre=${req.query?.genre}`;
     const response = await processFetchRequest(QUOTES_URL);
 
     res.status(200).json(response);
