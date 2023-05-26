@@ -1,12 +1,11 @@
 import { Button, FormControl, TextField } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { KeyboardEventHandler, useState } from 'react';
-import { selectQuotes, addQuote } from '@/store/slices/customQuoteSlice';
+import { addQuote } from '@/store/slices/customQuoteSlice';
 
 export default function CustomQuoteForm() {
     const [quote, setQuote] = useState('');
     const dispatch = useDispatch();
-    const quotes = useSelector(selectQuotes);
     
     const handleSave = () => {
         dispatch(addQuote(quote));

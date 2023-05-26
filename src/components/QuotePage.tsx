@@ -78,8 +78,6 @@ export default function QuotePage() {
     const [isMounted, setIsMounted] = useState(false);
     const hasTransitionedIn = hooks.useMountTransition(isMounted, 1000);
 
-    const customQuotes = useSelector(selectQuotes);
-
     const [dimensions, { loading, error }] = useImageSize(backgroundSrcImage);
     const createCanvasProps = {
         backgroundSrcImage,
@@ -96,6 +94,7 @@ export default function QuotePage() {
     const [downloadElementRef, downloadElement] = hooks.useHtml2Canvas(createCanvasProps);
     const [handleImageUpload] = hooks.useUploadImage(downloadElementRef, createCanvasProps);
 
+    const customQuotes = useSelector(selectQuotes);
     const [quotesList, setQuotesList] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const fetchData = useCallback(async (quoteGenre: QuoteGenre) => {
@@ -116,7 +115,6 @@ export default function QuotePage() {
     }, [quoteGenre, fetchData]);
 
     useEffect(() => {
-        console.log(currentIndex, quotesList[currentIndex])
         dispatch(setText(quotesList[currentIndex]));
         setIsMounted(true);
     }, [currentIndex, quotesList, dispatch]);

@@ -44,7 +44,7 @@ export default function CustomQuotesPage() {
             {!isEmpty && <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop="20px">
                 {customQuotes.map((quote) => (
                     <Grid item xs={2} sm={4} md={4} key={quote}>
-                        <Card sx={{ maxWidth: '100%', backgroundColor: '#EBDEF0' }}>
+                        <Card sx={{ maxWidth: '100%', backgroundColor: '#B2EBF2' }}>
                             <CardContent>
                                 <Typography variant="h6" component="div">
                                     {quote}

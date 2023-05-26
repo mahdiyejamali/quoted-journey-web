@@ -17,15 +17,15 @@ const Header = styled.div`
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#1D96D4",
-      light: "#4AABDC",
-      dark: "#146994",
+      main: "#00BCD4",
+      light: "#4DD0E1",
+      dark: "#0097A7",
       contrastText: "#FFFFFF"
     },
     secondary: {
-      main: "#F50057",
-      light: "#F73378",
-      dark: "#AB003C",
+      main: "#EC407A",
+      light: "#EC407A",
+      dark: "#AD1457",
       contrastText: "#FFFFFF"
     }
   },
