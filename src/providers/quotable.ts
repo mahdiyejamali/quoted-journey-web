@@ -51,7 +51,7 @@ export const createQuoteText = (quoteObj: QuoteResponse) => {
 export const getQuotesList = async function (genre: QuoteGenre = 'life'): Promise<string[]> {
   const LIMIT = 100;
 
-  const response: QuoteGardenResponse = await processFetchRequest(`/api/quotes?genre=${genre}`);
+  const response: QuoteGardenResponse = await processFetchRequest(`https://quoted-journey-api.vercel.app/quotes?genre=${genre}`);
   let quotesByGenre = response?.data;
 
   if (!quotesByGenre) {
