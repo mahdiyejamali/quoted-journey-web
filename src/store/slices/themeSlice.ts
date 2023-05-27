@@ -4,7 +4,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { State } from '../store';
 
 export const themeInitialState = {
-    srcImage: '/bg-2.jpg',
+    srcImage: '/bg-8.jpg',
     musicState: false,
 };
 
