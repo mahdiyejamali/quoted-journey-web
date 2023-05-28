@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import useClickOutside from '@/hooks/useClickOutside';
 
 const ColorSwatchWrapper = styled.div`
-    margin-top: 10px;
+    margin-top: 1rem;
     z-index: 1;
     position: absolute;
 `;

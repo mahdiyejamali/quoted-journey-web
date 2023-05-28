@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 const SliderWrapper = styled.div`
     .font-size-slider {
         color: black;
-        padding: 10px 10px 10px 10px;
+        padding: 1rem 1rem 1rem 1rem;
         width: 85%;
     }
 `;

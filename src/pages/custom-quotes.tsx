@@ -31,17 +31,17 @@ export default function CustomQuotesPage() {
 
     return (
         <Wrapper>
-            <div style={{paddingTop: "40px"}}>
+            <div style={{paddingTop: "2rem"}}>
                 <CustomQuoteForm />
             </div>
 
             {isEmpty && 
-                <Typography variant="h6" component="h2" paddingTop="20px">
+                <Typography variant="h6" component="h2" paddingTop="2rem">
                     Your custom quotes list is empty.
                 </Typography>
             }
 
-            {!isEmpty && <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop="20px">
+            {!isEmpty && <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} paddingTop="2rem">
                 {customQuotes.map((quote) => (
                     <Grid item xs={2} sm={4} md={4} key={quote}>
                         <Card sx={{ maxWidth: '100%', backgroundColor: '#B2EBF2' }}>

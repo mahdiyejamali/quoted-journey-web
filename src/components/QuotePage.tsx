@@ -37,7 +37,7 @@ const MainButtonsWrapper = styled.div`
     left: 5%;
     left: 5%;
     display: flex;
-    width: 100%;
+    width: 95%;
 `;
 
 const QuoteWrapper = styled.div`
@@ -56,8 +56,8 @@ const QuoteWrapper = styled.div`
         position: absolute;
         z-index: 1;
         top: 30%;
-        left: 20%;
-        right: 20%;
+        left: 15%;
+        right: 15%;
         transform: translate(0%, 50%);
         white-space: pre-wrap;
     }

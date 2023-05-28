@@ -9,20 +9,20 @@ import { ChevronLeft } from "@mui/icons-material";
 import QuoteGenreSelect from "./QuoteGenreSelect";
 
 const SideBarWrapper = styled.div`
-    width: 400px;
+    width: 23rem;
 `;
 
 const SideBarItem =  styled.div`
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 `;
 
 const SideBarItemsWrapper = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
-    padding: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: 1rem;
     border: 1px solid #A0A0A0;
     border-radius: 5px;
 `;
@@ -47,7 +47,7 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
             }}
             onClick={(event) => event.stopPropagation()}
         >
-            <div style={{marginTop: '5px', marginLeft: '5px'}}>
+            <div style={{marginTop: '.5rem', marginLeft: '.5rem'}}>
                 <IconButton size="large" onClick={toggleSideBar}>
                     <ChevronLeft />
                 </IconButton>
@@ -79,6 +79,8 @@ export default function QuoteSideBar(props: QuoteSideBarProps) {
                 <SideBarItemsWrapper>
                     <ThemeSelect />
                 </SideBarItemsWrapper>
+
+                <SideBarItem></SideBarItem>
 
             </SideBarWrapper>
         </Drawer>

@@ -8,11 +8,11 @@ interface ThemeCardProps {
 export default function ThemeCard(props: ThemeCardProps) {
     const {src, onClick} = props;
     return (
-        <Card sx={{ maxWidth: 150 }} onClick={() => onClick(src)}>
+        <Card sx={{ maxWidth: '100rem' }} onClick={() => onClick(src)}>
           <CardActionArea>
             <CardMedia
               component="img"
-              height="150"
+              height="120rem"
               image={src}
               alt="green iguana"
             />
